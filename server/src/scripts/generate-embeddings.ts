@@ -1,14 +1,8 @@
 import { PDFLoader } from "langchain/document_loaders/fs/pdf";
 import { RecursiveCharacterTextSplitter } from "langchain/text_splitter";
 import { v4 as uuidv4 } from "uuid";
-import { Pinecone } from "@pinecone-database/pinecone";
 import { generateEmbeddings } from "../utils.js";
-import { PINECONE_API_KEY } from "../config.js";
-
-const pc = new Pinecone({
-  apiKey: PINECONE_API_KEY,
-});
-const index = pc.index("query-pdf-docs");
+import { index } from "../config.js";
 
 // Load content from pdf document
 const loader = new PDFLoader(
