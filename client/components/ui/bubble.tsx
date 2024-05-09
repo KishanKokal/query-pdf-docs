@@ -13,7 +13,6 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { formattedText } from "@/app/utils";
-import ReactMarkdown from "react-markdown";
 
 interface chatBubbleProps {
   role: string;
@@ -56,7 +55,13 @@ const Bubble = ({ role, content, sources }: chatBubbleProps) => {
                 <AccordionItem value={`source-${index}`} key={index}>
                   <AccordionTrigger>{`Source ${index + 1}`}</AccordionTrigger>
                   <AccordionContent>
-                    <ReactMarkdown>{formattedText(source)}</ReactMarkdown>
+                    {"Source: " + source.source}
+                  </AccordionContent>
+                  <AccordionContent>
+                    {"Content: " + source.content}
+                  </AccordionContent>
+                  <AccordionContent>
+                    {"Page Number: " + source.pageNumber}
                   </AccordionContent>
                 </AccordionItem>
               ))}

@@ -3,30 +3,29 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { useState, useRef, useEffect } from "react";
 import Bubble from "@/components/ui/bubble";
+import { fetchQueryResponse } from "../utils";
+
+interface userMessage {
+  id: number;
+  content: string;
+  role: string;
+}
+
+interface assistantMessage {
+  id: number;
+  sources: object[];
+  role: string;
+}
 
 const Chat = () => {
   const messagesEndRef = useRef<HTMLDivElement>(null);
-  const [messages, setMessages] = useState([
+  const [messages, setMessages] = useState<(userMessage | assistantMessage)[]>([
     {
       id: 1,
       content:
         "My primary task is to identify and deliver the essential sections from the textbook, particularly those related to electromagnetism. If there's anything specific within that realm you're curious about or need clarification on, don't hesitate to ask, and I'll be glad to assist you!",
       role: "assistant",
-    },
-    {
-      id: 2,
-      content: "What is thermodynamics ?",
-      role: "user",
-    },
-    {
-      id: 3,
-      sources: [
-        "this is source1",
-        "this is source2",
-        "this is source3",
-        "this is source 4",
-      ],
-      role: "assistant",
+      sources: [],
     },
   ]);
   const [query, setQuery] = useState("");
@@ -36,7 +35,10 @@ const Chat = () => {
     const id = messages[length - 1]["id"] + 1;
     const content = query;
     const role = "user";
-    setMessages((prev) => [...prev, { id: id, content: content, role: role }]);
+    setMessages((prev) => [
+      ...prev,
+      { id: id, content: content, role: role, sources: [] },
+    ]);
     setQuery("");
   };
 
@@ -44,6 +46,14 @@ const Chat = () => {
     if (event.code === "Enter") {
       event.preventDefault();
       submitQuery();
+      fetchQueryResponse(query).then((sources): void => {
+        let id = messages.length;
+        console.log(sources);
+        setMessages((prev) => [
+          ...prev,
+          { id: id, role: "assistant", sources: sources, content: "" },
+        ]);
+      });
     }
   };
 
@@ -72,14 +82,27 @@ const Chat = () => {
             value={query}
             autoFocus={true}
             onChange={(e) => {
-              console.log(e.target.value);
               setQuery(e.target.value);
             }}
             onKeyDown={(event) => {
               handleKeyDown(event);
             }}
           />
-          <Button onClick={submitQuery}>Ask Question</Button>
+          <Button
+            onClick={() => {
+              submitQuery();
+              fetchQueryResponse(query).then((sources): void => {
+                let id = messages.length;
+                console.log(sources);
+                setMessages((prev) => [
+                  ...prev,
+                  { id: id, role: "assistant", sources: sources, content: "" },
+                ]);
+              });
+            }}
+          >
+            Ask Question
+          </Button>
         </div>
       </div>
     </div>
