@@ -26,7 +26,8 @@ The retrieved text segments are presented to users within the chat interface.
 
 To further illustrate the project, here's a video demonstrating the AI-powered chat interface in action:
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/wwPSA7-fM2A" frameborder="0" allowfullscreen></iframe>
+[![Watch the video demonstration](https://img.youtube.com/vi/wwPSA7-fM2A/0.jpg)](https://www.youtube.com/watch?v=wwPSA7-fM2A)
+
 
 ### Technology Stack
 
